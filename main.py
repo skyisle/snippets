@@ -23,6 +23,7 @@ from google.appengine.ext.webapp import util
 
 from emails import *
 from model import *
+from config import *
 
 import functools
 import urllib
@@ -174,7 +175,8 @@ class MainHandler(BaseHandler):
         template_values = {
                            'current_user' : user,
                            'all_users': all_users,
-                           'all_tags': all_tags                           
+                           'all_tags': all_tags,
+                           'sender' : SENDER
                            }
         self.render('index', template_values)
 

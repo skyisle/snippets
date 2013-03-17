@@ -9,6 +9,8 @@ from google.appengine.ext.webapp import util
 from dateutil import *
 from model import *
 
+from config import *
+
 REMINDER = """
 한 주간 수고하셨습니다.
 회신으로 업무내역을 입력해주세요. :)
@@ -30,7 +32,7 @@ class ReminderEmail(webapp.RequestHandler):
 
 class OneReminderEmail(webapp.RequestHandler):
     def post(self):
-        mail.send_mail(sender="snippets <snippets@minisnippets.appspotmail.com>", # FIX ME
+        mail.send_mail(sender=SENDER,
                        to=self.request.get('email'),
                        subject="Snippet 타임!",
                        body=REMINDER)
@@ -47,7 +49,7 @@ class DigestEmail(webapp.RequestHandler):
 
 class OneDigestEmail(webapp.RequestHandler):
     def __send_mail(self, recipient, body):
-        mail.send_mail(sender="snippets <snippets@minisnippets.appspotmail.com>", # FIX ME
+        mail.send_mail(sender=SENDER,
                        to=recipient,
                        subject="Snippet Digest 메일이 도착하였습니다!",
                        body=body)
@@ -68,6 +70,6 @@ class OneDigestEmail(webapp.RequestHandler):
         logging.info(all_snippets)
         body = '\n\n\n'.join([self.__snippet_to_text(s) for s in all_snippets if s.user.email in following])
         if body:
-            self.__send_mail(user.email, 'https://minisnippets.appspot.com\n\n' + body) # FIX ME
+            self.__send_mail(user.email, HOST+ '\n\n' + body)
         else:
             logging.info(user.email + ' not following anybody.')
